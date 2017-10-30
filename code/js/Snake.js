@@ -90,24 +90,32 @@ Snake.prototype.drawSnake = function(gameArea, playGround) {
 };
 
 Snake.prototype.moveUp = function() {
-
+    if (this.direction != 'down') {
+        this.direction = 'up';
+    }
 };
 
 Snake.prototype.moveDown = function() {
-
+    if (this.direction != 'up') {
+        this.direction = 'down';
+    }
 };
 
 Snake.prototype.moveRight = function() {
-
+    if (this.direction != 'left') {
+        this.direction = 'right';
+    }
 };
 
 Snake.prototype.moveLeft = function() {
-
+    if (this.direction != 'right') {
+        this.direction = 'left';
+    }
 };
 
 
 
-Snake.prototype.checkColision = function() {
+Snake.prototype.hasCrash = function() {
     // Check snake's head, body and board limits
 };
 

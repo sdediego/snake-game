@@ -1,8 +1,7 @@
-body {
-    margin: 0;
-    padding: 0;
-}
+
 
 canvas {
-  border: 1px solid #f00;
+    margin-top: 10px;
+    margin-left: 25px;
+    border: 1px solid #f00;
 }

@@ -25,6 +25,29 @@ function updateGameArea() {
     myGameArea.update(myPlayGround, myScoreBoard);
     mySnake.drawSnake(myGameArea, myPlayGround);
     mySnake.creep();
-
-
+    if (mySnake.hasEatenBug()) {
+        //Completar logica
+    }
+    if (mySnake.hasCrash()) {
+        myGameArea.stop();
+        //myGameArea.gameOver();
+        return;
+    };
 }
+
+document.onkeydown = function(event) {
+    switch (event.keyCode) {
+        case 37:
+            mySnake.moveLeft();
+            break;
+        case 38:
+            mySnake.moveUp();
+            break;
+        case 39:
+            mySnake.moveRight();
+            break;
+        case 40:
+            mySnake.moveDown();
+            break;
+    }
+};
