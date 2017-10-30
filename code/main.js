@@ -1,17 +1,30 @@
 var myGameArea;
-var playGround;
-var scoreBoard;
-var snake;
+var myPlayGround;
+var myScoreBoard;
+var mySnake;
 
 window.onload = function() {
     myGameArea = new GameArea();
-    playGround = new PlayGround();
-    scoreBoard = new ScoreBoard(playGround);
-    snake = new Snake();
+    myGameArea.setBackgroundImage();
+    myPlayGround = new PlayGround();
+    myScoreBoard = new ScoreBoard(myPlayGround);
+    mySnake = new Snake();
+
+    myBug = new Bug();
     // Initialize the game loop
-    myGameArea.init(playGround, scoreBoard, updateGameArea);
+    myGameArea.init(myPlayGround, myScoreBoard, updateGameArea);
+    mySnake.startCreeping();
+    //for (var i = 0; i < 5; i++) {
+        //mySnake.drawSnake(myGameArea, myPlayGround);
+        //mySnake.creep();
+    //}
 };
 
 function updateGameArea() {
+    myGameArea.clear();
+    myGameArea.update(myPlayGround, myScoreBoard);
+    mySnake.drawSnake(myGameArea, myPlayGround);
+    mySnake.creep();
+
 
 }

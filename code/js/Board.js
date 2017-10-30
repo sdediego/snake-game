@@ -22,7 +22,7 @@ var SCOREBOARD_CONTEXT_STYLE = '#000';
 var TEXT_CONTEXT_STYLE = '#fff';
 var TEXT_CONTEXT_FONT = '20px serif';
 // Define canvas update interval
-var INTERVAL_UPDATE_TIME = 20;
+var INTERVAL_UPDATE_TIME = 100;
 
 
 // GameArea constructor function
@@ -32,12 +32,13 @@ function GameArea() {
     this.canvas.width = GAME_AREA_WIDTH;
     this.canvas.height = GAME_AREA_HEIGHT;
     this.image = new Image();
-    // Borrar estas dos lineas al sustituir el fondo por imagen
-    this.context.fillStyle = GAME_AREA_STYLE;
-    this.context.fillRect(0, 0, this.canvas.width, this.canvas.height );
 }
 
 GameArea.prototype.setBackgroundImage = function() {
+    // Borrar estas dos lineas al definir el fondo
+    this.context.fillStyle = GAME_AREA_STYLE;
+    this.context.fillRect(0, 0, this.canvas.width, this.canvas.height );
+    // Definir la imagen de fondo
     this.image.src = BACKGROUND_IMAGE_SRC;
     this.image.onload = function() {
         this.context.drawImage(this.image, this.x, this.y, this.width, this.height);
@@ -45,6 +46,7 @@ GameArea.prototype.setBackgroundImage = function() {
 };
 
 GameArea.prototype.update = function(playGround, scoreBoard) {
+    this.setBackgroundImage();
     scoreBoard.setScoreBoard(this, playGround);
     //playGround.setPlayGroundImage(this);
     playGround.setPlayGroundGrid();
@@ -73,6 +75,7 @@ function PlayGround() {
     this.height = PLAYGROUND_HEIGHT;
     this.rows = PLAYGROUND_ROWS;
     this.columns = PLAYGROUND_COLUMNS;
+    this.cellSize = PLAYGROUND_CELL_SIZE;
     this.grid = this.setPlayGroundGrid();
     this.image = new Image();
 }
@@ -89,11 +92,11 @@ PlayGround.prototype.setPlayGroundGrid = function() {
 PlayGround.prototype.drawGrid = function(gameArea) {
     gameArea.context.fillStyle = '#fff';
     gameArea.context.fillRect(this.x, this.y, this.width, this.height );
-    for (var x = this.x; x <= this.x + this.width; x += PLAYGROUND_CELL_SIZE) {
+    for (var x = this.x; x <= this.x + this.width; x += this.cellSize) {
         gameArea.context.moveTo(x, 0);
         gameArea.context.lineTo(x, this.height);
     }
-    for (var y = 0; y <= PLAYGROUND_HEIGHT; y += PLAYGROUND_CELL_SIZE) {
+    for (var y = 0; y <= this.height; y += this.cellSize) {
         gameArea.context.moveTo(this.x, y);
         gameArea.context.lineTo(this.x + this.width, y);
     }
