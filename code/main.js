@@ -8,7 +8,7 @@ window.onload = function() {
     playGround = new PlayGround();
     scoreBoard = new ScoreBoard(playGround);
     snake = new Snake();
-
+    // Initialize the game loop
     myGameArea.init(playGround, scoreBoard, updateGameArea);
 };
 

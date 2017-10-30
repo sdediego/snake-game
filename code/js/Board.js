@@ -1,12 +1,18 @@
 // Define GameArea Object constants
 var GAME_AREA_WIDTH = window.innerWidth;
 var GAME_AREA_HEIGHT = window.innerHeight;
+var GAME_AREA_STYLE = '#00f';
 // Define PlayGround Object constants
-var PLAYGROUND_WIDTH = 0.8 * GAME_AREA_WIDTH;
-var PLAYGROUND_HEIGHT = GAME_AREA_HEIGHT;
+var PLAYGROUND_ROWS = 20;
+var PLAYGROUND_COLUMNS = 25;
+var PLAYGROUND_CELL_SIZE = parseInt(GAME_AREA_HEIGHT / PLAYGROUND_ROWS);
+var PLAYGROUND_WIDTH = PLAYGROUND_COLUMNS * PLAYGROUND_CELL_SIZE;
+var PLAYGROUND_HEIGHT = PLAYGROUND_ROWS * PLAYGROUND_CELL_SIZE;
+var PLAYGROUND_GRID_STYLE = '#000';
+var PLAYGROUND_IMAGE_SRC = './images/board/playground.jpg';
 // Define ScoreBoard Object constants
-var SCOREBOARD_WIDTH = GAME_AREA_WIDTH - PLAYGROUND_WIDTH;
-var SCOREBOARD_HEIGHT = GAME_AREA_HEIGHT;
+var SCOREBOARD_WIDTH = parseInt((GAME_AREA_WIDTH - PLAYGROUND_WIDTH) / 2);
+var SCOREBOARD_HEIGHT = PLAYGROUND_HEIGHT;
 // Define background image path
 var BACKGROUND_IMAGE_SRC = './images/board/background.jpg';
 // Define scoreboard init and context
@@ -25,11 +31,24 @@ function GameArea() {
     this.context = this.canvas.getContext('2d');
     this.canvas.width = GAME_AREA_WIDTH;
     this.canvas.height = GAME_AREA_HEIGHT;
+    this.image = new Image();
+    // Borrar estas dos lineas al sustituir el fondo por imagen
+    this.context.fillStyle = GAME_AREA_STYLE;
+    this.context.fillRect(0, 0, this.canvas.width, this.canvas.height );
 }
 
+GameArea.prototype.setBackgroundImage = function() {
+    this.image.src = BACKGROUND_IMAGE_SRC;
+    this.image.onload = function() {
+        this.context.drawImage(this.image, this.x, this.y, this.width, this.height);
+    }.bind(this);
+};
+
 GameArea.prototype.update = function(playGround, scoreBoard) {
-    playGround.setBackgroundImage(this);
     scoreBoard.setScoreBoard(this, playGround);
+    //playGround.setPlayGroundImage(this);
+    playGround.setPlayGroundGrid();
+    playGround.drawGrid(this);
 };
 
 GameArea.prototype.init = function(playGround, scoreBoard, updateFunction) {
@@ -48,24 +67,52 @@ GameArea.prototype.clear = function() {
 
 // PlayGround constructor function
 function PlayGround() {
-    this.x = 0;
+    this.x = SCOREBOARD_WIDTH;
     this.y = 0;
     this.width = PLAYGROUND_WIDTH;
     this.height = PLAYGROUND_HEIGHT;
+    this.rows = PLAYGROUND_ROWS;
+    this.columns = PLAYGROUND_COLUMNS;
+    this.grid = this.setPlayGroundGrid();
+    this.image = new Image();
 }
 
-PlayGround.prototype.setBackgroundImage = function(gameArea) {
-    var image = new Image();
-    image.src = BACKGROUND_IMAGE_SRC;
-    image.onload = function() {
-        gameArea.context.drawImage(image, this.x, this.y, this.width, this.height);
+PlayGround.prototype.setPlayGroundGrid = function() {
+    var twoDimensionalGrid  = new Array(this.rows);
+    for (var i = 0; i < twoDimensionalGrid.length; i++) {
+        twoDimensionalGrid[i] = new Array(this.columns).fill(0);
+        //console.log(twoDimensionalGrid[i]);
+    }
+    return twoDimensionalGrid;
+};
+
+PlayGround.prototype.drawGrid = function(gameArea) {
+    gameArea.context.fillStyle = '#fff';
+    gameArea.context.fillRect(this.x, this.y, this.width, this.height );
+    for (var x = this.x; x <= this.x + this.width; x += PLAYGROUND_CELL_SIZE) {
+        gameArea.context.moveTo(x, 0);
+        gameArea.context.lineTo(x, this.height);
+    }
+    for (var y = 0; y <= PLAYGROUND_HEIGHT; y += PLAYGROUND_CELL_SIZE) {
+        gameArea.context.moveTo(this.x, y);
+        gameArea.context.lineTo(this.x + this.width, y);
+    }
+    gameArea.context.strokeStyle = PLAYGROUND_GRID_STYLE;
+    gameArea.context.stroke();
+};
+
+PlayGround.prototype.setPlayGroundImage = function(gameArea) {
+    //var image = new Image();
+    this.image.src = PLAYGROUND_IMAGE_SRC;
+    this.image.onload = function() {
+        gameArea.context.drawImage(this.image, this.x, this.y, this.width, this.height);
     }.bind(this);
 };
 
 
 // ScoreBoard constructor function
 function ScoreBoard(playGround, points, state) {
-    this.x = playGround.width;
+    this.x = playGround.x + playGround.width;
     this.y = 0;
     this.width = SCOREBOARD_WIDTH;
     this.height = SCOREBOARD_HEIGHT;
@@ -80,6 +127,9 @@ ScoreBoard.prototype.setScoreBoard = function(gameArea, playGround) {
     // Set text context
     gameArea.context.font = TEXT_CONTEXT_FONT;
     gameArea.context.fillStyle = TEXT_CONTEXT_STYLE;
-    gameArea.context.fillText('Score: ' + this.points, this.x, this.height/5, this.width);
-    gameArea.context.fillText('State: ' + this.state, this.x, this.height/4, this.width);
+    // Ajustar marcador
+    gameArea.context.fillText('Score: ' + this.points, this.x + 50, this.height/5, this.width);
+    gameArea.context.fillText('State: ' + this.state, this.x + 50, this.height/4, this.width);
+    //gameArea.context.strokeText('Score: ' + this.points, this.x, this.height/5, this.width);
+    //gameArea.context.strokeText('State: ' + this.state, this.x, this.height/4, this.width);
 };

@@ -23,14 +23,15 @@ function Bug(x, y, type) {
     this.x = x;
     this.y = y;
     this.type = type ? type : NEUTRAL_BUG;
+    this.image = new Image();
     this.imageScale;
 }
 
 Bug.prototype.setBugImage = function(myGameArea, bugImage) {
-    var context = myGameArea.context;
-    var image = new Image();
-    image.src = bugImage;
-    image.onload = function() {
-    //    context.drawImage(this, this.x, this.y, );
+    //var context = myGameArea.context;
+    //var image = new Image();
+    this.image.src = bugImage;
+    this.image.onload = function() {
+    //    gameArea.context.drawImage(this.image, this.x, this.y, );
     }.bind(this);
 };

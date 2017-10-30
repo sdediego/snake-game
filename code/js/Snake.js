@@ -1,6 +1,8 @@
 // Define Snake Object constants
 var SNAKE_DEFAULT_XPOSITION;
 var SNAKE_DEFAULT_YPOSITION;
+var SNAKE_DEFAULT_UNIT_SIZE = 20; // 20px
+var SNAKE_DEFAULT_BODY_SIZE = 5;  // 5 body units
 var SNAKE_DEFAULT_SPEED = 1;
 var SNAKE_DEFAULT_DIRECTION = 'right';
 var SNAKE_DEFAULT_STATUS = 'cool';
@@ -9,14 +11,18 @@ var SNAKE_POISSON_STATUS;
 
 
 // Snake constructor function
-function Snake(x, y, direction, speed) {
+function Snake(x, y, size) {
     this.xHead = x ? x : SNAKE_DEFAULT_XPOSITION;
     this.yHead = y ? y : SNAKE_DEFAULT_YPOSITION;
-    this.body = new Array();
+    this.size = size ? size : SNAKE_DEFAULT_UNIT_SIZE;
+    this.body = new Array(this.size);
+}
+
+Snake.prototype.creep = function(direction, speed, status) {
     this.direction = direction ? direction : SNAKE_DEFAULT_DIRECTION;
     this.speed = speed ? speed : SNAKE_DEFAULT_SPEED;
-    this.status = SNAKE_DEFAULT_STATUS;
-}
+    this.status = status ? status : SNAKE_DEFAULT_STATUS;
+};
 
 Snake.prototype.moveUp = function() {
     this.ySpeed--;
