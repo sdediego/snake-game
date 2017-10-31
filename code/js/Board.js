@@ -39,10 +39,10 @@ GameArea.prototype.setBackgroundImage = function() {
     this.context.fillStyle = GAME_AREA_STYLE;
     this.context.fillRect(0, 0, this.canvas.width, this.canvas.height );
     // Definir la imagen de fondo
-    this.image.src = BACKGROUND_IMAGE_SRC;
-    this.image.onload = function() {
-        this.context.drawImage(this.image, this.x, this.y, this.width, this.height);
-    }.bind(this);
+    //this.image.src = BACKGROUND_IMAGE_SRC;
+    //this.image.onload = function() {
+    //    this.context.drawImage(this.image, this.x, this.y, this.width, this.height);
+    //}.bind(this);
 };
 
 GameArea.prototype.update = function(playGround, scoreBoard) {
@@ -100,7 +100,7 @@ PlayGround.prototype.updateGridValues = function(object) {
     this.toZeroPlayGroundGrid();
     if (object.constructor.name === 'Snake') {
         for(var i = 0; i < object.body.length; i++) {
-            console.log(this);
+            //console.log(this);
             this.grid[object.body[i]['y']][object.body[i]['x']] = 1;
         }
     } else if (object.constructor.name === 'Bug') {
@@ -141,6 +141,11 @@ function ScoreBoard(playGround, points, state) {
     this.points = points ? points : SCOREBOARD_INIT_POINTS;
     this.state = state ? state : SCOREBOARD_INIT_STATE;
 }
+
+ScoreBoard.prototype.update = function(points, status) {
+    this.points += points;
+    this.status = status;
+};
 
 ScoreBoard.prototype.setScoreBoard = function(gameArea, playGround) {
     // Set scoreboard context

@@ -1,14 +1,14 @@
 // Define Snake Object constants
 var SNAKE_DEFAULT_XPOSITION = 9;  // 10th x-position block
 var SNAKE_DEFAULT_YPOSITION = 9;  // 10th y-position block
-var SNAKE_DEFAULT_BODY_SIZE = 5;  // 5 body units
+var SNAKE_DEFAULT_BODY_SIZE = 15;  // 5 body units
 // Initial displacement configuration
 var SNAKE_DEFAULT_SPEED = 1;
 var SNAKE_DEFAULT_DIRECTION = 'right';
 // Snake's possible status
 var SNAKE_DEFAULT_STATUS = 'cool';
-var SNAKE_SPEEDUP_STATUS;
-var SNAKE_POISSON_STATUS;
+var SNAKE_SPEEDUP_STATUS = 'speedy';
+var SNAKE_POISSON_STATUS = 'high';
 
 
 // Snake constructor function
@@ -43,7 +43,7 @@ Snake.prototype.startCreeping = function(direction, speed, status) {
     //console.log(this.body);
 };
 
-Snake.prototype.creep = function() {
+Snake.prototype.creep = function(hasEaten) {
     // Snake's displacement forward following current direction
     //console.log(this.xHead, this.yHead);
     if (this.xHead === PLAYGROUND_COLUMNS - 1 && this.direction === 'right') {
@@ -63,7 +63,9 @@ Snake.prototype.creep = function() {
         'x': this.xHead,
         'y': this.yHead,
     });
-    this.body.pop();
+    if (!hasEaten){
+        this.body.pop();
+    }
     //console.log(this.body);
 };
 
@@ -109,42 +111,65 @@ Snake.prototype.moveLeft = function() {
     }
 };
 
-Snake.prototype.hasEatenBug = function() {
+Snake.prototype.hasEatenBug = function(bug) {
     // Check snake's head and bug position
+    return this.xHead === bug.x && this.yHead === bug.y;
 };
 
 Snake.prototype.hasCrash = function() {
     // Check snake's head and body for colision
+    console.log('checking crash');
+    for (var i = 1; i < this.body.length; i++) {
+        if (this.xHead === this.body[i]['x'] && this.yHead === this.body[i]['y']) {
+            return true;
+        }
+    }
+    return false;
 };
 
-Snake.prototype.growSnake = function() {
+Snake.prototype.setSnakeState = function(speed, status) {
+    this.speed = speed || SNAKE_DEFAULT_SPEED;
+    this.status = status || SNAKE_DEFAULT_STATUS;
+};
+
+Snake.prototype.growSnake = function(status) {
     // Append another body unit to snake's body
     this.size++;
-
+    this.setSnakeState();
 };
 
 Snake.prototype.backToChildhood = function() {
     // Set snake's initial baby snake body size
+    this.setSnakeState();
+    this.size = SNAKE_DEFAULT_BODY_SIZE;
+    this.startCreeping(this.direction, this.speed, this.status);
 };
 
 Snake.prototype.speedyGonzalez = function() {
     // Speed up snake's displacement
+    this.setSnakeState(1.5, SNAKE_SPEEDUP_STATUS);
+    this.speed *= 1.5;
 };
 
 Snake.prototype.toTortoise = function() {
     // Slow down snake's displacement
+    this.setSnakeState(0.5);
 };
 
 Snake.prototype.reverseDirection = function() {
     // Reverse snake's head and tail
+    this.setSnakeState();
 };
 
 Snake.prototype.onDrugs = function() {
     // Alter snake control buttons
+    this.setSnakeState(1, SNAKE_POISSON_STATUS);
+
 };
 
 Snake.prototype.invokeAlterEgoSnake = function() {
     // Split up snake in two competing hungry snakes
+
 };
 
 Snake.prototype.dieSnake = function() {
