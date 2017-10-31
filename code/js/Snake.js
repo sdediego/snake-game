@@ -31,13 +31,13 @@ Snake.prototype.startCreeping = function(direction, speed, status) {
     this.direction = direction ? direction : SNAKE_DEFAULT_DIRECTION;
     this.speed = speed ? speed : SNAKE_DEFAULT_SPEED;
     this.status = status ? status : SNAKE_DEFAULT_STATUS;
-    console.log('cabeza: ', this.xHead, this.yHead);
+    //console.log('cabeza: ', this.xHead, this.yHead);
     for (var i = 0; i < this.size; i++) {
         this.body.push({
             'x': this.xHead - i * this.directions[this.direction][0],
             'y': this.yHead - i * this.directions[this.direction][1]
         });
-        console.log(this.body[i]);
+        //console.log(this.body[i]);
     }
     //console.log('cabeza: ', this.xHead, this.yHead);
     //console.log(this.body);
@@ -67,13 +67,9 @@ Snake.prototype.creep = function() {
     //console.log(this.body);
 };
 
-Snake.prototype.hasEatenBug = function() {
-    // Check snake's head and bug position
-};
-
 Snake.prototype.drawSnake = function(gameArea, playGround) {
-    console.log('Pintado la serpiente');
-    console.log(this.body);
+    //console.log('Pintado la serpiente');
+    //console.log(this.body);
     this.body.forEach(function(bodyPart) {
         gameArea.context.fillStyle = 'red';
         gameArea.context.fillRect(
@@ -113,10 +109,12 @@ Snake.prototype.moveLeft = function() {
     }
 };
 
-
+Snake.prototype.hasEatenBug = function() {
+    // Check snake's head and bug position
+};
 
 Snake.prototype.hasCrash = function() {
-    // Check snake's head, body and board limits
+    // Check snake's head and body for colision
 };
 
 Snake.prototype.growSnake = function() {

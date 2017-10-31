@@ -89,6 +89,25 @@ PlayGround.prototype.setPlayGroundGrid = function() {
     return twoDimensionalGrid;
 };
 
+PlayGround.prototype.toZeroPlayGroundGrid = function() {
+    this.grid.forEach(function(rowGrid) {
+        rowGrid.fill(0);
+    });
+};
+
+PlayGround.prototype.updateGridValues = function(object) {
+    //console.log(object.body);
+    this.toZeroPlayGroundGrid();
+    if (object.constructor.name === 'Snake') {
+        for(var i = 0; i < object.body.length; i++) {
+            console.log(this);
+            this.grid[object.body[i]['y']][object.body[i]['x']] = 1;
+        }
+    } else if (object.constructor.name === 'Bug') {
+        this.grid[object.x][object.y] = 1;
+    }
+};
+
 PlayGround.prototype.drawGrid = function(gameArea) {
     gameArea.context.fillStyle = '#fff';
     gameArea.context.fillRect(this.x, this.y, this.width, this.height );

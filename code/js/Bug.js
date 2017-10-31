@@ -7,7 +7,7 @@ var TORTOISE_BUG = 'tortoise_bug';
 var POISSON_BUG = 'poisson_bug';
 var CRAB_BUG = 'crab_bug';
 var ALTEREGO_REVEAL_BUG = 'alter_ego_reveal_bug';
-
+// Define Bug image paths
 var NEUTRAL_BUG_IMG;
 var BIG_MEAL_BUG_IMG;
 var BENJAMIN_BUTTON_BUG_IMG;
@@ -16,22 +16,57 @@ var SLOWLY_BUG_IMG;
 var POISSON_BUG_IMG;
 var CRAB_BUG_IMG;
 var ALTEREGO_REVEAL_BUG_IMG;
+// Define Bug set
+var BUG_TYPE = [
+    {type : NEUTRAL_BUG,         image : NEUTRAL_BUG_IMG},
+    {type : BIG_MEAL_BUG,        image : BIG_MEAL_BUG_IMG},
+    {type : BENJAMIN_BUTTON_BUG, image : BENJAMIN_BUTTON_BUG_IMG},
+    {type : SPEEDY_GONZALEZ_BUG, image : SPEEDY_BUG_IMG},
+    {type : TORTOISE_BUG,        image : SLOWLY_BUG_IMG},
+    {type : POISSON_BUG,         image : POISSON_BUG_IMG},
+    {type : CRAB_BUG,            image : CRAB_BUG_IMG},
+    {type : ALTEREGO_REVEAL_BUG, image : ALTEREGO_REVEAL_BUG_IMG},
+];
 
 
 // Bug constructor function
 function Bug(x, y, type) {
     this.x = x;
     this.y = y;
-    this.type = type ? type : NEUTRAL_BUG;
+    this.bugType = type ? type : BUG_TYPE[0];
     this.image = new Image();
     this.imageScale;
 }
 
-Bug.prototype.setBugImage = function(myGameArea, bugImage) {
+Bug.prototype.createNewBug = function() {
+    this.getRandomBug();
+    this.setBugImage(gameArea);
+};
+
+Bug.prototype.getRandomBug = function() {
+    this.x = Math.floor(Math.random() * PLAYGROUND_COLUMNS);
+    this.y = Math.floor(Math.random() * PLAYGROUND_ROWS);
+    this.bugType = BUG_TYPE[Math.floor(Math.random() * BUG_TYPE.length)];
+};
+
+Bug.prototype.setBugImage = function(gameArea) {
     //var context = myGameArea.context;
     //var image = new Image();
-    this.image.src = bugImage;
+    /*this.image.src = this.bugType.image;
     this.image.onload = function() {
-    //    gameArea.context.drawImage(this.image, this.x, this.y, );
-    }.bind(this);
+        gameArea.context.drawImage(
+            this.image,
+            this.x*playGround.cellSize + playGround.x,
+            this.y*playGround.cellSize,
+            playGround.cellSize,
+            playGround.cellSize
+        );
+    }.bind(this);*/
+    gameArea.context.fillStyle = 'blue';
+    gameArea.context.fillRect(
+        this.x*playGround.cellSize + playGround.x,
+        this.y*playGround.cellSize,
+        playGround.cellSize,
+        playGround.cellSize
+    );
 };

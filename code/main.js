@@ -12,8 +12,8 @@ window.onload = function() {
 
     myBug = new Bug();
     // Initialize the game loop
-    myGameArea.init(myPlayGround, myScoreBoard, updateGameArea);
     mySnake.startCreeping();
+    myGameArea.init(myPlayGround, myScoreBoard, updateGameArea);
     //for (var i = 0; i < 5; i++) {
         //mySnake.drawSnake(myGameArea, myPlayGround);
         //mySnake.creep();
@@ -24,15 +24,16 @@ function updateGameArea() {
     myGameArea.clear();
     myGameArea.update(myPlayGround, myScoreBoard);
     mySnake.drawSnake(myGameArea, myPlayGround);
-    mySnake.creep();
-    if (mySnake.hasEatenBug()) {
-        //Completar logica
-    }
-    if (mySnake.hasCrash()) {
-        myGameArea.stop();
-        //myGameArea.gameOver();
-        return;
-    };
+    mySnake.creep(myPlayGround);
+    myPlayGround.updateGridValues(mySnake);
+    //if (mySnake.hasEatenBug()) {
+    //    //Completar logica
+    //}
+    //if (mySnake.hasCrash()) {
+    //    myGameArea.stop();
+    //    //myGameArea.gameOver();
+    //    return;
+    //};
 }
 
 document.onkeydown = function(event) {
