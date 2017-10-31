@@ -78,7 +78,27 @@ function setSnakeStatus() {
     }
 }
 
-document.onkeydown = function(event) {
+function moveSnake(event) {
+    switch (event.keyCode) {
+        case 37:
+            mySnake.moveRight();
+            break;
+        case 38:
+            mySnake.moveDown();
+            break;
+        case 39:
+            mySnake.moveLeft();
+            break;
+        case 40:
+            mySnake.moveUp();
+            break;
+        case 27:
+            myGameArea.stop();
+            break;
+    }
+}
+
+function moveSnakeOnDrugs(event) {
     switch (event.keyCode) {
         case 37:
             mySnake.moveLeft();
@@ -95,5 +115,13 @@ document.onkeydown = function(event) {
         case 27:
             myGameArea.stop();
             break;
+    }
+}
+
+document.onkeydown = function(event) {
+    if (mySnake.status !== SNAKE_POISSON_STATUS) {
+        moveSnake(event);
+    } else if (mySnake.status === SNAKE_POISSON_STATUS ) {
+        moveSnakeOnDrugs(event);
     }
 };

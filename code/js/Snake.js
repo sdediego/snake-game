@@ -118,7 +118,6 @@ Snake.prototype.hasEatenBug = function(bug) {
 
 Snake.prototype.hasCrash = function() {
     // Check snake's head and body for colision
-    console.log('checking crash');
     for (var i = 1; i < this.body.length; i++) {
         if (this.xHead === this.body[i]['x'] && this.yHead === this.body[i]['y']) {
             return true;
@@ -148,7 +147,6 @@ Snake.prototype.backToChildhood = function() {
 Snake.prototype.speedyGonzalez = function() {
     // Speed up snake's displacement
     this.setSnakeState(1.5, SNAKE_SPEEDUP_STATUS);
-    this.speed *= 1.5;
 };
 
 Snake.prototype.toTortoise = function() {
@@ -159,12 +157,27 @@ Snake.prototype.toTortoise = function() {
 Snake.prototype.reverseDirection = function() {
     // Reverse snake's head and tail
     this.setSnakeState();
+    this.body = this.body.reverse();
+    this.xHead = this.body[0]['x'];
+    this.yHead = this.body[0]['y'];
+    if (this.xHead == this.body[1]['x']) {
+        if (this.yHead < this.body[1]['y']) {
+            this.direction;
+        } else if (this.yHead > this.body[1]['y']) {
+            this.direction;
+        }
+    } else if (this.yHead == this.body[1]['y']) {
+        if (this.xHead < this.body[1]['x']) {
+            this.direction;
+        } else if (this.xHead > this.body[1]['x']) {
+            this.direction;
+        }
+    }
 };
 
 Snake.prototype.onDrugs = function() {
     // Alter snake control buttons
     this.setSnakeState(1, SNAKE_POISSON_STATUS);
-
 };
 
 Snake.prototype.invokeAlterEgoSnake = function() {
