@@ -6,44 +6,66 @@ var mySnake;
 var myBug;
 
 window.onload = function() {
-    myGameArea = new GameArea();
-    myGameArea.setBackgroundImage();
-    myPlayGround = new PlayGround();
-    myScoreBoard = new ScoreBoard(myPlayGround);
-    mySnake = new Snake();
-    mySnake.startCreeping();
-    myBug = new Bug();
-    myBug.getRandomBug(myPlayGround);
-    // Initialize the game loop
-
-    myGameArea.init(myPlayGround, myScoreBoard, updateGameArea);
-    //for (var i = 0; i < 5; i++) {
-        //mySnake.drawSnake(myGameArea, myPlayGround);
-        //mySnake.creep();
-    //}
+    imagesLoader(allGameImages, function(images) {
+        myGameArea = new GameArea();
+        //myGameArea.getImage(images);
+        myGameArea.setBackgroundImage();
+        myPlayGround = new PlayGround();
+        myPlayGround.getImage(images);
+        myScoreBoard = new ScoreBoard(myPlayGround);
+        //myScoreBoard.getImage(images);
+        mySnake = new Snake();
+        mySnake.getImage(images);
+        mySnake.startCreeping();
+        myBug = new Bug();
+        //myBug.getImage(images);
+        myBug.getRandomBug(myPlayGround);
+        // Initialize the game loop
+        myGameArea.init(myPlayGround, myScoreBoard, updateGameArea);
+    });
 };
+
+function imagesLoader(imagesPaths, callback) {
+    var imageObjects = {};
+    var numberOfImages = 0;
+    var numberOfLoadedImages = 0;
+
+    for (var image in imagesPaths) {
+        numberOfImages++;
+    }
+
+    for (var image in imagesPaths) {
+        console.log(image);
+        imageObjects[image] = new Image();
+        imageObjects[image].src = imagesPaths[image];
+        imageObjects[image].onload = function() {
+            if (++numberOfLoadedImages >= numberOfImages) {
+                callback(imageObjects);
+            }
+        };
+    }
+}
 
 function updateGameArea() {
     myGameArea.clear();
     myGameArea.update(myPlayGround, myScoreBoard);
-    myBug.drawBug(myGameArea, myPlayGround);
     mySnake.drawSnake(myGameArea, myPlayGround);
+    myBug.drawBug(myGameArea, myPlayGround);
 
     if (mySnake.hasEatenBug(myBug)) {
-        //Completar logica
         //myScoreBoard.
         mySnake.creep(true);
         mySnake.growSnake();
-        //setSnakeStatus();
+        setSnakeStatus();
         myBug.getRandomBug(myPlayGround);
     } else {
         mySnake.creep(false);
     }
 
-    if (mySnake.hasCrash()) {
+    if (mySnake.hasCrash(myPlayGround)) {
         myGameArea.stop();
         //mySnake.dieSnake();
-        //return;
+        return;
     }
 
     myPlayGround.updateGridValues(mySnake);
@@ -81,16 +103,16 @@ function setSnakeStatus() {
 function moveSnake(event) {
     switch (event.keyCode) {
         case 37:
-            mySnake.moveRight();
-            break;
-        case 38:
-            mySnake.moveDown();
-            break;
-        case 39:
             mySnake.moveLeft();
             break;
-        case 40:
+        case 38:
             mySnake.moveUp();
+            break;
+        case 39:
+            mySnake.moveRight();
+            break;
+        case 40:
+            mySnake.moveDown();
             break;
         case 27:
             myGameArea.stop();
@@ -101,16 +123,16 @@ function moveSnake(event) {
 function moveSnakeOnDrugs(event) {
     switch (event.keyCode) {
         case 37:
-            mySnake.moveLeft();
-            break;
-        case 38:
-            mySnake.moveUp();
-            break;
-        case 39:
             mySnake.moveRight();
             break;
-        case 40:
+        case 38:
             mySnake.moveDown();
+            break;
+        case 39:
+            mySnake.moveLeft();
+            break;
+        case 40:
+            mySnake.moveUp();
             break;
         case 27:
             myGameArea.stop();

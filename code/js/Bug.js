@@ -19,12 +19,12 @@ var ALTEREGO_REVEAL_BUG_IMG;
 // Define Bug set
 var BUG_TYPE = [
     {type : NEUTRAL_BUG,         image : 'yellow'},
-    {type : BIG_MEAL_BUG,        image : BIG_MEAL_BUG_IMG},
-    {type : BENJAMIN_BUTTON_BUG, image : BENJAMIN_BUTTON_BUG_IMG},
-    {type : SPEEDY_GONZALEZ_BUG, image : SPEEDY_BUG_IMG},
-    {type : TORTOISE_BUG,        image : SLOWLY_BUG_IMG},
-    {type : POISSON_BUG,         image : POISSON_BUG_IMG},
-    {type : CRAB_BUG,            image : CRAB_BUG_IMG},
+    {type : BIG_MEAL_BUG,        image : 'blue'},
+    {type : BENJAMIN_BUTTON_BUG, image : 'aqua'},
+    {type : SPEEDY_GONZALEZ_BUG, image : 'green'},
+    {type : TORTOISE_BUG,        image : 'brown'},
+    {type : POISSON_BUG,         image : 'orange'},
+    {type : CRAB_BUG,            image : 'purple'},
     //{type : ALTEREGO_REVEAL_BUG, image : ALTEREGO_REVEAL_BUG_IMG},
 ];
 
@@ -49,7 +49,10 @@ Bug.prototype.getRandomBug = function(playGround) {
         this.y = Math.floor(Math.random() * PLAYGROUND_ROWS);
         console.log(this.x, this.y);
     } while (playGround.grid[this.y][this.x] === 1);
-    //this.bugType = BUG_TYPE[Math.floor(Math.random() * BUG_TYPE.length)];
+    do {
+        var bug = BUG_TYPE[Math.floor(Math.random() * BUG_TYPE.length)];
+    } while(this.bugType.type == bug.type);
+    //this.bugType = bug;
     //console.log(this.x, this.y, this.bugType);
 };
 

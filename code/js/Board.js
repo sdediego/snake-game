@@ -3,8 +3,8 @@ var GAME_AREA_WIDTH = 0.95 * window.innerWidth;
 var GAME_AREA_HEIGHT = 0.95 * window.innerHeight;
 var GAME_AREA_STYLE = '#00f';
 // Define PlayGround Object constants
-var PLAYGROUND_ROWS = 20;
-var PLAYGROUND_COLUMNS = 25;
+var PLAYGROUND_ROWS = 15 ;
+var PLAYGROUND_COLUMNS = 20;
 var PLAYGROUND_CELL_SIZE = GAME_AREA_HEIGHT / PLAYGROUND_ROWS;
 var PLAYGROUND_WIDTH = PLAYGROUND_COLUMNS * PLAYGROUND_CELL_SIZE;
 var PLAYGROUND_HEIGHT = PLAYGROUND_ROWS * PLAYGROUND_CELL_SIZE;
@@ -48,9 +48,9 @@ GameArea.prototype.setBackgroundImage = function() {
 GameArea.prototype.update = function(playGround, scoreBoard) {
     this.setBackgroundImage();
     scoreBoard.setScoreBoard(this, playGround);
-    //playGround.setPlayGroundImage(this);
+    playGround.setPlayGroundImage(this);
     playGround.setPlayGroundGrid();
-    playGround.drawGrid(this);
+    //playGround.drawGrid(this);
 };
 
 GameArea.prototype.init = function(playGround, scoreBoard, updateFunction) {
@@ -104,10 +104,11 @@ PlayGround.prototype.updateGridValues = function(object) {
             this.grid[object.body[i]['y']][object.body[i]['x']] = 1;
         }
     } else if (object.constructor.name === 'Bug') {
-        this.grid[object.x][object.y] = 1;
+        this.grid[object.y][object.x] = 1;
     }
 };
 
+// Draw grid for development purpose
 PlayGround.prototype.drawGrid = function(gameArea) {
     gameArea.context.fillStyle = '#fff';
     gameArea.context.fillRect(this.x, this.y, this.width, this.height );
@@ -123,12 +124,17 @@ PlayGround.prototype.drawGrid = function(gameArea) {
     gameArea.context.stroke();
 };
 
+PlayGround.prototype.getImage = function(images) {
+    this.image = images.PLAYGROUND_IMAGE;
+    //console.log(this.image);
+};
+
 PlayGround.prototype.setPlayGroundImage = function(gameArea) {
     //var image = new Image();
-    this.image.src = PLAYGROUND_IMAGE_SRC;
-    this.image.onload = function() {
+    //this.image.src = PLAYGROUND_IMAGE_SRC;
+    //this.image.onload = function() {
         gameArea.context.drawImage(this.image, this.x, this.y, this.width, this.height);
-    }.bind(this);
+    //}.bind(this);
 };
 
 
