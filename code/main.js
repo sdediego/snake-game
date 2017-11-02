@@ -18,84 +18,94 @@ window.onload = function() {
         mySnake.getImage(images);
         mySnake.startCreeping();
         myBug = new Bug();
-        //myBug.getImage(images);
+        myBug.getImage(images);
         myBug.getRandomBug(myPlayGround);
         // Initialize the game loop
         myGameArea.init(myPlayGround, myScoreBoard, updateGameArea);
     });
 };
 
+// Load all images before starting the game
 function imagesLoader(imagesPaths, callback) {
     var imageObjects = {};
     var numberOfImages = 0;
     var numberOfLoadedImages = 0;
 
-    for (var image in imagesPaths) {
-        numberOfImages++;
+    var keys = Object.keys(imagesPaths);
+    for (var type in keys) {
+        for (var image in imagesPaths[keys[type]]) {
+            numberOfImages++;
+        }
     }
 
-    for (var image in imagesPaths) {
-        console.log(image);
-        imageObjects[image] = new Image();
-        imageObjects[image].src = imagesPaths[image];
-        imageObjects[image].onload = function() {
-            if (++numberOfLoadedImages >= numberOfImages) {
-                callback(imageObjects);
-            }
-        };
+    var keys = Object.keys(imagesPaths);
+    for (var index in keys) {
+        imageObjects[keys[index]] = {};
+        for (var image in imagesPaths[keys[index]]) {
+            imageObjects[keys[index]][image] = new Image();
+            imageObjects[keys[index]][image].src = imagesPaths[keys[index]][image];
+            imageObjects[keys[index]][image].onload = function() {
+                if (++numberOfLoadedImages >= numberOfImages) {
+                    callback(imageObjects);
+                }
+            };
+        }
     }
 }
 
+
 function updateGameArea() {
-    myGameArea.clear();
-    myGameArea.update(myPlayGround, myScoreBoard);
-    mySnake.drawSnake(myGameArea, myPlayGround);
-    myBug.drawBug(myGameArea, myPlayGround);
 
-    if (mySnake.hasEatenBug(myBug)) {
-        //myScoreBoard.
-        mySnake.creep(true);
-        mySnake.growSnake();
-        setSnakeStatus();
-        myBug.getRandomBug(myPlayGround);
-    } else {
-        mySnake.creep(false);
+    myGameArea.frames++;
+    if (myGameArea.frames % mySnake.speed === 0) {
+        myGameArea.clear();
+        myGameArea.update(myPlayGround, myScoreBoard);
+        myBug.drawBug(myGameArea, myPlayGround);
+        mySnake.drawSnake(myGameArea, myPlayGround);
+
+        if (mySnake.hasEatenBug(myBug)) {
+            mySnake.growSnake();
+            mySnake.creep(true);
+            setSnakeStatus();
+            myBug.getRandomBug(myPlayGround);
+            myScoreBoard.update(1, mySnake.status);
+            //console.log(myBug.bugType);
+        } else {
+            mySnake.creep(false);
+        }
+
+        if (mySnake.hasCrash(myPlayGround)) {
+            myGameArea.stop();
+            //mySnake.dieSnake();
+            return;
+        }
+
+        myPlayGround.updateGridValues(mySnake);
+        myPlayGround.updateGridValues(myBug);
     }
-
-    if (mySnake.hasCrash(myPlayGround)) {
-        myGameArea.stop();
-        //mySnake.dieSnake();
-        return;
-    }
-
-    myPlayGround.updateGridValues(mySnake);
-    myPlayGround.updateGridValues(myBug);
 }
 
 function setSnakeStatus() {
     switch (myBug.bugType.type) {
-        case NEUTRAL_BUG:
+        case 'NEUTRAL_BUG':
             break;
-        case BIG_MEAL_BUG:
+        case 'BIG_MEAL_BUG':
             // Scoreboard up to five points.
             break;
-        case BENJAMIN_BUTTON_BUG:
+        case 'BENJAMIN_BUTTON_BUG':
             mySnake.backToChildhood();
             break;
-        case SPEEDY_GONZALEZ_BUG:
+        case 'SPEEDY_GONZALEZ_BUG':
             mySnake.speedyGonzalez();
             break;
-        case TORTOISE_BUG:
+        case 'TORTOISE_BUG':
             mySnake.toTortoise();
             break;
-        case POISSON_BUG:
+        case 'POISSON_BUG':
             mySnake.onDrugs();
             break;
-        case CRAB_BUG:
+        case 'CRAB_BUG':
             mySnake.reverseDirection();
-            break;
-        case ALTEREGO_REVEAL_BUG:
-            mySnake.invokeAlterEgoSnake();
             break;
     }
 }

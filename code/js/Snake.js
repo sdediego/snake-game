@@ -1,29 +1,15 @@
 // Define Snake Object constants
-var SNAKE_DEFAULT_XPOSITION = 9;  // 10th x-position block
+var SNAKE_DEFAULT_XPOSITION = 4;  // 10th x-position block
 var SNAKE_DEFAULT_YPOSITION = 9;  // 10th y-position block
 var SNAKE_DEFAULT_BODY_SIZE = 5;  // 5 body units
 // Initial displacement configuration
-var SNAKE_DEFAULT_SPEED = 1;
+var SNAKE_DEFAULT_SPEED = 2;
 var SNAKE_DEFAULT_DIRECTION = 'right';
 // Snake's possible status
 var SNAKE_DEFAULT_STATUS = 'cool';
 var SNAKE_SPEEDUP_STATUS = 'speedy';
+var SNAKE_SLOWLY_STATUS = 'slowly';
 var SNAKE_POISSON_STATUS = 'high';
-// Snake images
-var SNAKE_IMAGE_HEAD_UP = './images/snake/yellowHeadUp.png';
-var SNAKE_IMAGE_HEAD_RIGHT = './images/snake/yellowHeadRight.png';
-var SNAKE_IMAGE_HEAD_DOWN = './images/snake/yellowHeadDown.png';
-var SNAKE_IMAGE_HEAD_LEFT = './images/snake/yellowHeadLeft.png';
-var SNAKE_IMAGE_TAIL_UP = './images/snake/yellowTailUp.png';
-var SNAKE_IMAGE_TAIL_RIGHT = './images/snake/yellowTailRight.png';
-var SNAKE_IMAGE_TAIL_DOWN = './images/snake/yellowTailDown.png';
-var SNAKE_IMAGE_TAIL_LEFT = './images/snake/yellowTailLeft.png';
-var SNAKE_IMAGE_BODY_HORIZONTAL = './images/snake/yellowBodyHorizontal.png';
-var SNAKE_IMAGE_BODY_VERTICAL = './images/snake/yellowBodyVertical.png';
-var SNAKE_IMAGE_TURN_RIGHT_UP = './images/snake/yellowBodyRightUp.png';
-var SNAKE_IMAGE_TURN_RIGHT_DOWN = './images/snake/yellowRightDown.png';
-var SNAKE_IMAGE_TURN_LEFT_UP = './images/snake/yellowLeftUp.png';
-var SNAKE_IMAGE_TURN_LEFT_DOWN = './images/snake/yellowLeftDown.png';
 
 
 // Snake constructor function
@@ -55,52 +41,20 @@ Snake.prototype.startCreeping = function(direction, speed, status) {
 };
 
 Snake.prototype.creep = function(hasEaten) {
-    // Snake's displacement forward following current direction
-    //console.log(this.xHead, this.yHead);
-//    if (this.xHead === PLAYGROUND_COLUMNS - 1 && this.direction === 'right') {
-//        this.xHead = 0;
-//    } else if (this.xHead === 0 && this.direction === 'left') {
-//        this.xHead = PLAYGROUND_COLUMNS - 1;
-//    } else if (this.yHead === 0 && this.direction === 'up') {
-//        this.yHead = PLAYGROUND_ROWS - 1;
-//    } else if (this.yHead === PLAYGROUND_ROWS - 1 && this.direction === 'down') {
-//        this.yHead = 0;
-//    } else {
-        this.xHead += this.directions[this.direction][0];
-        this.yHead += this.directions[this.direction][1];
-//    }
-    //console.log(this.xHead, this.yHead);
+    this.xHead += this.directions[this.direction][0];
+    this.yHead += this.directions[this.direction][1];
     this.body.unshift({
         'x': this.xHead,
         'y': this.yHead,
     });
+
     if (!hasEaten){
         this.body.pop();
     }
-    //console.log(this.body);
 };
 
-//Snake.prototype.drawSnake = function(gameArea, playGround) {
-//    //console.log('Pintado la serpiente');
-//    //console.log(this.body);
-//    this.body.forEach(function(bodyPart) {
-//        gameArea.context.fillStyle = 'red';
-//        gameArea.context.fillRect(
-//            bodyPart['x']*playGround.cellSize + playGround.x,
-//            bodyPart['y']*playGround.cellSize,
-//            playGround.cellSize,
-//            playGround.cellSize
-//            //console.log('x', bodyPart['x']*playGround.cellSize + playGround.x),
-//            //console.log('y', bodyPart['y']*playGround.cellSize),
-//            //console.log('width', playGround.cellSize),
-//            //console.log('height', playGround.cellSize)
-//        );
-//    });
-//};
-
 Snake.prototype.getImage = function(images) {
-    this.images = images;
-    //console.log(this.image);
+    this.images = images.snake;
 };
 
 Snake.prototype.drawSnake = function(gameArea, playGround) {
@@ -108,84 +62,60 @@ Snake.prototype.drawSnake = function(gameArea, playGround) {
         var bodyPart = this.body[i];
         var x = bodyPart['x'];
         var y = bodyPart['y'];
-        var width = playGround.cellsize;
-        var height = playGround.cellsize;
         var image = new Image();
 
         if (i === 0) {
-            console.log('Cabeza: ', bodyPart);
-            var nextBodyPart = this.body[i+1];
-            if (y < nextBodyPart['y']) {
-                //image.src = SNAKE_IMAGE_HEAD_UP;
+            // Head
+            if (y < this.body[i+1]['y']) {
                 image = this.images.SNAKE_IMAGE_HEAD_UP;
-            } else if (y > nextBodyPart['y']) {
-                //image.src = SNAKE_IMAGE_HEAD_DOWN;
+            } else if (y > this.body[i+1]['y']) {
                 image = this.images.SNAKE_IMAGE_HEAD_DOWN;
-            } else if (x > nextBodyPart['x']) {
-                //image.src =SNAKE_IMAGE_HEAD_RIGHT;
+            } else if (x > this.body[i+1]['x']) {
                 image = this.images.SNAKE_IMAGE_HEAD_RIGHT;
-            } else if (x < nextBodyPart['x']) {
-                //image.src = SNAKE_IMAGE_HEAD_LEFT;
+            } else if (x < this.body[i+1]['x']) {
                 image = this.images.SNAKE_IMAGE_HEAD_LEFT;
             }
         } else if (i === this.body.length - 1) {
-            console.log('Tail: ', bodyPart);
-            var previousBodyPart = this.body[i-1];
-            if (y < previousBodyPart['y']) {
-                //image.src = SNAKE_IMAGE_TAIL_UP;
+            // Tail
+            if (y < this.body[i-1]['y']) {
                 image = this.images.SNAKE_IMAGE_TAIL_DOWN;
-            } else if (y > previousBodyPart['y'] ) {
-                //image.src = SNAKE_IMAGE_TAIL_DOWN;
+            } else if (y > this.body[i-1]['y'] ) {
                 image = this.images.SNAKE_IMAGE_TAIL_UP;
-            } else if (x < previousBodyPart['x']) {
-                //image.src = SNAKE_IMAGE_TAIL_RIGHT;
+            } else if (x < this.body[i-1]['x']) {
                 image = this.images.SNAKE_IMAGE_TAIL_RIGHT;
-            } else if (x > previousBodyPart['x']) {
-                //image.src = SNAKE_IMAGE_TAIL_LEFT;
+            } else if (x > this.body[i-1]['x']) {
                 image = this.images.SNAKE_IMAGE_TAIL_LEFT;
             }
         } else {
             // Body part image except head or tail
-            console.log('Body: ', bodyPart);
-            var previousBodyPart = this.body[i-1];
-            var nextBodyPart = this.body[i+1];
-            if (previousBodyPart['x'] < x && nextBodyPart['x'] > x || previousBodyPart['x'] > x && nextBodyPart['x'] < x) {
+            if (this.body[i-1]['x'] < x && this.body[i+1]['x'] > x || this.body[i-1]['x'] > x && this.body[i+1]['x'] < x) {
                 // Body horizontal
-                //image.src = SNAKE_IMAGE_BODY_HORIZONTAL;
                 image = this.images.SNAKE_IMAGE_BODY_HORIZONTAL;
-            } else if (previousBodyPart['y'] < y && nextBodyPart['y'] > y || previousBodyPart['y'] > y && nextBodyPart['y'] < y) {
+            } else if (this.body[i-1]['y'] < y && this.body[i+1]['y'] > y || this.body[i-1]['y'] > y && this.body[i+1]['y'] < y) {
                 // Body vertical
-                //image.src = SNAKE_IMAGE_BODY_VERTICAL;
                 image = this.images.SNAKE_IMAGE_BODY_VERTICAL;
-            } else if (previousBodyPart['y'] < y && nextBodyPart['x'] < x || nextBodyPart['y'] < y && previousBodyPart['x'] < x) {
+            } else if (this.body[i-1]['y'] < y && this.body[i+1]['x'] < x || this.body[i-1]['x'] < x && this.body[i+1]['y'] < y) {
                 // Body right-up
-                //image.src = SNAKE_IMAGE_TURN_RIGHT_UP;
                 image = this.images.SNAKE_IMAGE_TURN_RIGHT_UP;
-            } else if (previousBodyPart['x'] < x && nextBodyPart['y'] > y || nextBodyPart['x'] < x && previousBodyPart['y'] > y) {
+            } else if (this.body[i-1]['x'] < x && this.body[i+1]['y'] > y || this.body[i-1]['y'] > y && this.body[i+1]['x'] < x) {
                 // Body right-down
-                //image.src = SNAKE_IMAGE_TURN_RIGHT_DOWN;
                 image = this.images.SNAKE_IMAGE_TURN_RIGHT_DOWN;
-            } else if (previousBodyPart['x'] > x && nextBodyPart['y'] < y || nextBodyPart['x'] > x && previousBodyPart['y'] < y) {
+            } else if (this.body[i-1]['x'] > x && this.body[i+1]['y'] < y || this.body[i-1]['y'] < y && this.body[i+1]['x'] > x) {
                 // Body left-up
-                //image.src = SNAKE_IMAGE_TURN_LEFT_UP;
                 image = this.images.SNAKE_IMAGE_TURN_LEFT_UP;
-            } else if (previousBodyPart['y'] > y && nextBodyPart['x'] > x || previousBodyPart['x'] > x && nextBodyPart['y'] > y) {
+            } else if (this.body[i-1]['y'] > y && this.body[i+1]['x'] > x || this.body[i-1]['x'] > x && this.body[i+1]['y'] > y) {
                 // Body left-down
-                //image.src = SNAKE_IMAGE_TURN_LEFT_DOWN;
                 image = this.images.SNAKE_IMAGE_TURN_LEFT_DOWN;
             }
         }
 
-        // Draw corresponding image
-        //image.onload = function() {
-            gameArea.context.drawImage(
-                image,
-                bodyPart['x']*playGround.cellSize + playGround.x,
-                bodyPart['y']*playGround.cellSize,
-                playGround.cellSize,
-                playGround.cellSize
-            );
-        //}.bind(this);
+        gameArea.context.drawImage(
+            image,
+            bodyPart['x']*playGround.cellSize + playGround.x,
+            bodyPart['y']*playGround.cellSize,
+            playGround.cellSize,
+            playGround.cellSize
+        );
     }
 };
 
@@ -234,6 +164,7 @@ Snake.prototype.hasCrash = function(playGround) {
 };
 
 Snake.prototype.setSnakeState = function(speed, status) {
+    // Set snake status according to the eaten bug
     this.speed = speed || SNAKE_DEFAULT_SPEED;
     this.status = status || SNAKE_DEFAULT_STATUS;
 };
@@ -253,12 +184,12 @@ Snake.prototype.backToChildhood = function() {
 
 Snake.prototype.speedyGonzalez = function() {
     // Speed up snake's displacement
-    this.setSnakeState(2, SNAKE_SPEEDUP_STATUS);
+    this.setSnakeState(1, SNAKE_SPEEDUP_STATUS);
 };
 
 Snake.prototype.toTortoise = function() {
     // Slow down snake's displacement
-    this.setSnakeState(0.5);
+    this.setSnakeState(4, SNAKE_SLOWLY_STATUS);
 };
 
 Snake.prototype.reverseDirection = function() {
@@ -269,26 +200,22 @@ Snake.prototype.reverseDirection = function() {
     this.yHead = this.body[0]['y'];
     if (this.xHead == this.body[1]['x']) {
         if (this.yHead < this.body[1]['y']) {
-            this.direction;
+            this.direction = 'up';
         } else if (this.yHead > this.body[1]['y']) {
-            this.direction;
+            this.direction ='down';
         }
     } else if (this.yHead == this.body[1]['y']) {
         if (this.xHead < this.body[1]['x']) {
-            this.direction;
+            this.direction = 'left';
         } else if (this.xHead > this.body[1]['x']) {
-            this.direction;
+            this.direction = 'right';
         }
     }
 };
 
 Snake.prototype.onDrugs = function() {
     // Alter snake control buttons
-    this.setSnakeState(1, SNAKE_POISSON_STATUS);
-};
-
-Snake.prototype.invokeAlterEgoSnake = function() {
-    // Split up snake in two competing hungry snakes
+    this.setSnakeState(SNAKE_DEFAULT_SPEED, SNAKE_POISSON_STATUS);
 };
 
 Snake.prototype.dieSnake = function() {

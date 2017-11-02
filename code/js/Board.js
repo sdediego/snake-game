@@ -22,7 +22,7 @@ var SCOREBOARD_CONTEXT_STYLE = '#000';
 var TEXT_CONTEXT_STYLE = '#fff';
 var TEXT_CONTEXT_FONT = '20px serif';
 // Define canvas update interval
-var INTERVAL_UPDATE_TIME = 100;
+var INTERVAL_UPDATE_TIME = 50;
 
 
 // GameArea constructor function
@@ -32,6 +32,7 @@ function GameArea() {
     this.canvas.width = GAME_AREA_WIDTH;
     this.canvas.height = GAME_AREA_HEIGHT;
     this.image = new Image();
+    this.frames = 0;
 }
 
 GameArea.prototype.setBackgroundImage = function() {
@@ -50,7 +51,6 @@ GameArea.prototype.update = function(playGround, scoreBoard) {
     scoreBoard.setScoreBoard(this, playGround);
     playGround.setPlayGroundImage(this);
     playGround.setPlayGroundGrid();
-    //playGround.drawGrid(this);
 };
 
 GameArea.prototype.init = function(playGround, scoreBoard, updateFunction) {
@@ -84,7 +84,6 @@ PlayGround.prototype.setPlayGroundGrid = function() {
     var twoDimensionalGrid  = new Array(this.rows);
     for (var i = 0; i < twoDimensionalGrid.length; i++) {
         twoDimensionalGrid[i] = new Array(this.columns).fill(0);
-        //console.log(twoDimensionalGrid[i]);
     }
     return twoDimensionalGrid;
 };
@@ -96,11 +95,9 @@ PlayGround.prototype.toZeroPlayGroundGrid = function() {
 };
 
 PlayGround.prototype.updateGridValues = function(object) {
-    //console.log(object.body);
     this.toZeroPlayGroundGrid();
     if (object.constructor.name === 'Snake') {
         for(var i = 0; i < object.body.length; i++) {
-            //console.log(this);
             this.grid[object.body[i]['y']][object.body[i]['x']] = 1;
         }
     } else if (object.constructor.name === 'Bug') {
@@ -125,16 +122,11 @@ PlayGround.prototype.drawGrid = function(gameArea) {
 };
 
 PlayGround.prototype.getImage = function(images) {
-    this.image = images.PLAYGROUND_IMAGE;
-    //console.log(this.image);
+    this.image = images.playground.PLAYGROUND_IMAGE;
 };
 
 PlayGround.prototype.setPlayGroundImage = function(gameArea) {
-    //var image = new Image();
-    //this.image.src = PLAYGROUND_IMAGE_SRC;
-    //this.image.onload = function() {
-        gameArea.context.drawImage(this.image, this.x, this.y, this.width, this.height);
-    //}.bind(this);
+    gameArea.context.drawImage(this.image, this.x, this.y, this.width, this.height);
 };
 
 
@@ -145,7 +137,7 @@ function ScoreBoard(playGround, points, state) {
     this.width = SCOREBOARD_WIDTH;
     this.height = SCOREBOARD_HEIGHT;
     this.points = points ? points : SCOREBOARD_INIT_POINTS;
-    this.state = state ? state : SCOREBOARD_INIT_STATE;
+    this.status = state ? state : SCOREBOARD_INIT_STATE;
 }
 
 ScoreBoard.prototype.update = function(points, status) {
@@ -162,7 +154,7 @@ ScoreBoard.prototype.setScoreBoard = function(gameArea, playGround) {
     gameArea.context.fillStyle = TEXT_CONTEXT_STYLE;
     // Ajustar marcador
     gameArea.context.fillText('Score: ' + this.points, this.x + 50, this.height/5, this.width);
-    gameArea.context.fillText('State: ' + this.state, this.x + 50, this.height/4, this.width);
+    gameArea.context.fillText('Status: ' + this.status, this.x + 50, this.height/4, this.width);
     //gameArea.context.strokeText('Score: ' + this.points, this.x, this.height/5, this.width);
     //gameArea.context.strokeText('State: ' + this.state, this.x, this.height/4, this.width);
 };
