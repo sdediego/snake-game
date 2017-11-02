@@ -7,19 +7,20 @@ var myBug;
 
 window.onload = function() {
     imagesLoader(allGameImages, function(images) {
+        // Initialize all objects with loaded images
         myGameArea = new GameArea();
         myGameArea.getImage(images);
         myGameArea.setBackgroundImage();
         myPlayGround = new PlayGround();
         myPlayGround.getImage(images);
         myScoreBoard = new ScoreBoard(myPlayGround);
-        //myScoreBoard.getImage(images);
         mySnake = new Snake();
         mySnake.getImage(images);
         mySnake.startCreeping();
         myBug = new Bug();
         myBug.getImage(images);
         myBug.getRandomBug(myPlayGround);
+
         // Initialize the game loop
         myGameArea.init(myPlayGround, myScoreBoard, updateGameArea);
     });
@@ -38,7 +39,6 @@ function imagesLoader(imagesPaths, callback) {
         }
     }
 
-    //var keys = Object.keys(imagesPaths);
     for (var index in keys) {
         imageObjects[keys[index]] = {};
         for (var image in imagesPaths[keys[index]]) {
@@ -55,7 +55,6 @@ function imagesLoader(imagesPaths, callback) {
 
 
 function updateGameArea() {
-
     myGameArea.frames++;
     if (myGameArea.frames % mySnake.speed === 0) {
         myGameArea.clear();
@@ -69,14 +68,14 @@ function updateGameArea() {
             setSnakeStatus();
             myBug.getRandomBug(myPlayGround);
             myScoreBoard.update(1, mySnake.status);
-            //console.log(myBug.bugType);
         } else {
             mySnake.creep(false);
         }
 
         if (mySnake.hasCrash(myPlayGround)) {
+            myGameArea.dieSnake();
+            myGameArea.setHighestScore(myScoreBoard);
             myGameArea.stop();
-            //myPlayGround.dieSnake();
             return;
         }
 
@@ -90,7 +89,7 @@ function setSnakeStatus() {
         case 'NEUTRAL_BUG':
             break;
         case 'BIG_MEAL_BUG':
-            // Scoreboard up to five points.
+            myScoreBoard.update(4, mySnake.status);
             break;
         case 'BENJAMIN_BUTTON_BUG':
             mySnake.backToChildhood();

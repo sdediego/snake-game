@@ -9,8 +9,8 @@ var PLAYGROUND_CELL_SIZE = parseInt(GAME_AREA_HEIGHT / PLAYGROUND_ROWS);
 var PLAYGROUND_WIDTH = PLAYGROUND_COLUMNS * PLAYGROUND_CELL_SIZE;
 var PLAYGROUND_HEIGHT = PLAYGROUND_ROWS * PLAYGROUND_CELL_SIZE;
 var PLAYGROUND_GRID_STYLE = '#000';
-var PLAYGROUND_BORDER_STYLE = '#8B4513';
-var PLAYGROUND_BORDER_WIDTH = 5;
+var PLAYGROUND_BORDER_STYLE = '#000';//'#8B4513';
+var PLAYGROUND_BORDER_WIDTH = 2;
 // Define ScoreBoard Object constants
 var SCOREBOARD_WIDTH = parseInt((GAME_AREA_WIDTH - PLAYGROUND_WIDTH) / 2);
 var SCOREBOARD_HEIGHT = PLAYGROUND_HEIGHT;
@@ -19,8 +19,8 @@ var SCOREBOARD_INIT_POINTS = 0;
 var SCOREBOARD_INIT_STATUS = 'cool';
 var SCOREBOARD_INIT_SIZE = 5;
 var SCOREBOARD_CONTEXT_STYLE = '#000';
-var TEXT_CONTEXT_STYLE = '#fff';
-var TEXT_CONTEXT_FONT = '20px serif';
+var TEXT_CONTEXT_STYLE = '#000';
+var TEXT_CONTEXT_FONT = '24px Verdana';
 // Define canvas update interval
 var INTERVAL_UPDATE_TIME = 50;
 
@@ -31,23 +31,18 @@ function GameArea() {
     this.context = this.canvas.getContext('2d');
     this.canvas.width = GAME_AREA_WIDTH;
     this.canvas.height = GAME_AREA_HEIGHT;
-    this.image = new Image();
+    this.background = new Image();
+    this.endGame = new Image();
     this.frames = 0;
 }
 
 GameArea.prototype.getImage = function(images) {
-    this.image = images.background.BACKGROUND_IMAGE;
+    this.background = images.background.BACKGROUND_IMAGE;
+    this.endGame = images.gameover.GAME_OVER;
 };
 
 GameArea.prototype.setBackgroundImage = function() {
-    // Borrar estas dos lineas al definir el fondo
-    //this.context.fillStyle = GAME_AREA_STYLE;
-    //this.context.fillRect(0, 0, this.canvas.width, this.canvas.height );
-    // Definir la imagen de fondo
-    //this.image.src = BACKGROUND_IMAGE_SRC;
-    //this.image.onload = function() {
-    this.context.drawImage(this.image, 0, 0, this.canvas.width, this.canvas.height);
-    //}.bind(this);
+    this.context.drawImage(this.background, 0, 0, this.canvas.width, this.canvas.height);
 };
 
 GameArea.prototype.update = function(playGround, scoreBoard) {
@@ -68,6 +63,35 @@ GameArea.prototype.stop = function() {
 
 GameArea.prototype.clear = function() {
     this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
+};
+
+GameArea.prototype.dieSnake = function(gameArea) {
+    // Game Over: Give last goodbye to our lovely reptile
+    this.context.drawImage(
+        this.endGame, SCOREBOARD_WIDTH, 0,
+        this.canvas.width/3, this.canvas.height/3
+    );
+};
+
+GameArea.prototype.setHighestScore = function(scoreboard) {
+    var bestScore = localStorage.getItem('highestScore') || 0;
+    if (scoreboard.points > bestScore) {
+        localStorage.setItem('highestScore', scoreboard.points);
+    }
+    console.log(bestScore);
+    // Set text context
+    this.context.font = TEXT_CONTEXT_FONT;
+    this.context.fillStyle = TEXT_CONTEXT_STYLE;
+    // Ajustar marcador
+    this.context.fillText(
+        'Your Score: ' + scoreboard.points,
+        SCOREBOARD_WIDTH + PLAYGROUND_WIDTH/3, this.height/3, this.width
+    );
+    this.context.fillText(
+        'Highest Score: ' + bestScore,
+        this.x + 20, this.height/2, this.width
+    );
+    console.log('pintado');
 };
 
 
@@ -137,11 +161,6 @@ PlayGround.prototype.drawGrid = function(gameArea) {
     gameArea.context.stroke();
 };
 
-PlayGround.prototype.dieSnake = function(gameArea) {
-    // Game Over: Give last goodbye to our lovely reptile
-    //gameArea.context.drawImage(this.image, this.x, this.y, this.width, this.height);
-};
-
 
 // ScoreBoard constructor function
 function ScoreBoard(playGround, points, state) {
@@ -161,15 +180,10 @@ ScoreBoard.prototype.update = function(points, status) {
 };
 
 ScoreBoard.prototype.setScoreBoard = function(gameArea) {
-    // Set scoreboard context
-    gameArea.context.fillStyle = SCOREBOARD_CONTEXT_STYLE;
-    gameArea.context.fillRect(gameArea.canvas.width, 0, this.width, this.height);
     // Set text context
     gameArea.context.font = TEXT_CONTEXT_FONT;
     gameArea.context.fillStyle = TEXT_CONTEXT_STYLE;
     // Ajustar marcador
-    gameArea.context.fillText('Score: ' + this.points, this.x + 50, this.height/5, this.width);
-    gameArea.context.fillText('Status: ' + this.status, this.x + 50, this.height/4, this.width);
-    //gameArea.context.strokeText('Score: ' + this.points, this.x, this.height/5, this.width);
-    //gameArea.context.strokeText('State: ' + this.state, this.x, this.height/4, this.width);
+    gameArea.context.fillText('Score: ' + this.points, this.x + 20, this.height/4, this.width);
+    gameArea.context.fillText('Status: ' + this.status, this.x + 20, this.height/3, this.width);
 };

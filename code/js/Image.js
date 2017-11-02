@@ -1,10 +1,13 @@
 // All game images sources
 var allGameImages = {
     background : {
-        BACKGROUND_IMAGE : './images/board/background.png',
+        BACKGROUND_IMAGE : './images/board/background.jpg',
+    },
+    gameover : {
+        GAME_OVER : './images/board/gameover.png',
     },
     playground : {
-        PLAYGROUND_IMAGE : './images/board/playground.jpg',
+        PLAYGROUND_IMAGE : './images/board/playground.png',
     },
     snake : {
         SNAKE_IMAGE_HEAD_UP : './images/snake/yellowHeadUp.png',

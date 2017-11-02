@@ -41,8 +41,6 @@ Bug.prototype.getRandomBug = function(playGround) {
     this.bugType = bug;
 };
 
-
-
 Bug.prototype.drawBug = function(gameArea, playGround) {
     // Draw bug to the playground
     gameArea.context.drawImage(

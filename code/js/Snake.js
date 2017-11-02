@@ -59,10 +59,10 @@ Snake.prototype.getImage = function(images) {
 
 Snake.prototype.drawSnake = function(gameArea, playGround) {
     for (var i = 0; i < this.body.length; i++) {
+        var image = new Image();
         var bodyPart = this.body[i];
         var x = bodyPart['x'];
         var y = bodyPart['y'];
-        var image = new Image();
 
         if (i === 0) {
             // Head
