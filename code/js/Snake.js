@@ -9,14 +9,14 @@ var SNAKE_DEFAULT_DIRECTION = 'right';
 var SNAKE_DEFAULT_STATUS = 'cool';
 var SNAKE_SPEEDUP_STATUS = 'speedy';
 var SNAKE_SLOWLY_STATUS = 'slowly';
-var SNAKE_POISSON_STATUS = 'high';
+var SNAKE_POISSON_STATUS = 'inverse';
 
 
 // Snake constructor function
 function Snake(x, y, size) {
     this.xHead = x || x === 0 ? x : SNAKE_DEFAULT_XPOSITION;
     this.yHead = y || y === 0 ? y : SNAKE_DEFAULT_YPOSITION;
-    this.size = size ? size : SNAKE_DEFAULT_BODY_SIZE;
+    this.size = size || SNAKE_DEFAULT_BODY_SIZE;
     this.body = new Array();
     this.directions = {
         'up'    : [0, -1],
@@ -28,9 +28,9 @@ function Snake(x, y, size) {
 }
 
 Snake.prototype.startCreeping = function(direction, speed, status) {
-    this.direction = direction ? direction : SNAKE_DEFAULT_DIRECTION;
-    this.speed = speed ? speed : SNAKE_DEFAULT_SPEED;
-    this.status = status ? status : SNAKE_DEFAULT_STATUS;
+    this.direction = direction || SNAKE_DEFAULT_DIRECTION;
+    this.speed = speed || SNAKE_DEFAULT_SPEED;
+    this.status = status || SNAKE_DEFAULT_STATUS;
 
     for (var i = 0; i < this.size; i++) {
         this.body.push({
@@ -216,8 +216,4 @@ Snake.prototype.reverseDirection = function() {
 Snake.prototype.onDrugs = function() {
     // Alter snake control buttons
     this.setSnakeState(SNAKE_DEFAULT_SPEED, SNAKE_POISSON_STATUS);
-};
-
-Snake.prototype.dieSnake = function() {
-    // Give last goodbye to our lovely reptile
 };

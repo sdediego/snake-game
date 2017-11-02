@@ -8,7 +8,7 @@ var myBug;
 window.onload = function() {
     imagesLoader(allGameImages, function(images) {
         myGameArea = new GameArea();
-        //myGameArea.getImage(images);
+        myGameArea.getImage(images);
         myGameArea.setBackgroundImage();
         myPlayGround = new PlayGround();
         myPlayGround.getImage(images);
@@ -30,15 +30,15 @@ function imagesLoader(imagesPaths, callback) {
     var imageObjects = {};
     var numberOfImages = 0;
     var numberOfLoadedImages = 0;
-
     var keys = Object.keys(imagesPaths);
+
     for (var type in keys) {
         for (var image in imagesPaths[keys[type]]) {
             numberOfImages++;
         }
     }
 
-    var keys = Object.keys(imagesPaths);
+    //var keys = Object.keys(imagesPaths);
     for (var index in keys) {
         imageObjects[keys[index]] = {};
         for (var image in imagesPaths[keys[index]]) {
@@ -76,7 +76,7 @@ function updateGameArea() {
 
         if (mySnake.hasCrash(myPlayGround)) {
             myGameArea.stop();
-            //mySnake.dieSnake();
+            //myPlayGround.dieSnake();
             return;
         }
 

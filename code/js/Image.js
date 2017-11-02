@@ -1,7 +1,7 @@
 // All game images sources
 var allGameImages = {
     background : {
-        //BACKGROUND_IMAGE_SRC : './images/board/background.jpg',
+        BACKGROUND_IMAGE : './images/board/background.png',
     },
     playground : {
         PLAYGROUND_IMAGE : './images/board/playground.jpg',
