@@ -29,16 +29,16 @@ window.onload = function() {
 // Load all images before starting the game
 function imagesLoader(imagesPaths, callback) {
     var imageObjects = {};
-    var numberOfImages = 0;
-    var numberOfLoadedImages = 0;
-    var keys = Object.keys(imagesPaths);
 
+    var numberOfImages = 0;
+    var keys = Object.keys(imagesPaths);
     for (var type in keys) {
         for (var image in imagesPaths[keys[type]]) {
             numberOfImages++;
         }
     }
 
+    var numberOfLoadedImages = 0;
     for (var index in keys) {
         imageObjects[keys[index]] = {};
         for (var image in imagesPaths[keys[index]]) {
@@ -74,7 +74,10 @@ function updateGameArea() {
 
         if (mySnake.hasCrash(myPlayGround)) {
             myGameArea.dieSnake();
-            myGameArea.setHighestScore(myScoreBoard);
+            setTimeout(function() {
+                myGameArea.setBackgroundImage();
+                myGameArea.setHighestScore(myScoreBoard);
+            }, 1000);
             myGameArea.stop();
             return;
         }

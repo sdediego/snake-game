@@ -84,12 +84,6 @@ describe("Bug", function() {
         it("should receive 2 arguments", function() {
             expect(bug.drawBug.length).toEqual(2);
         });
-
-        it("should return undefined (no returning variable)", function() {
-            var gameArea = new GameArea();
-            var playGround = new PlayGround();
-            expect(bug.drawBug(gameArea, playGround)).toBe(undefined);
-        });
     });
 
     describe("createNewBug() method", function() {
@@ -99,12 +93,6 @@ describe("Bug", function() {
 
         it("should receive 2 arguments", function() {
             expect(bug.createNewBug.length).toEqual(2);
-        });
-
-        it("should return undefined (no returning variable)", function() {
-            var gameArea = new GameArea();
-            var playGround = new PlayGround();
-            expect(bug.createNewBug(gameArea, playGround)).toBe(undefined);
         });
     });
 });

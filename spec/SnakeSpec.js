@@ -6,6 +6,7 @@ describe("Snake", function() {
 
   beforeEach(function() {
     mySnake = new Snake(x, y, size);
+    mySnake.direction = 'right';
   });
 
   describe("Snake constructor function", function() {
@@ -90,12 +91,6 @@ describe("Snake", function() {
 
         it("should receive 2 arguments", function() {
             expect(mySnake.drawSnake.length).toEqual(2);
-        });
-
-        it("should return an undefined type of value", function() {
-            var myGameArea = new GameArea();
-            var myPlayGround = new PlayGround();
-            expect(mySnake.drawSnake(myGameArea, myPlayGround)).toEqual(undefined);
         });
     });
 
@@ -265,10 +260,6 @@ describe("Snake", function() {
 
         it("should receive 0 arguments", function() {
             expect(mySnake.reverseDirection.length).toEqual(0);
-        });
-
-        it("should return an undefined type of value", function() {
-            expect(mySnake.reverseDirection()).toEqual(undefined);
         });
     });
 

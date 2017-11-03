@@ -2,6 +2,8 @@
 var GAME_AREA_WIDTH = 0.95 * window.innerWidth;
 var GAME_AREA_HEIGHT = 0.95 * window.innerHeight;
 var GAME_AREA_STYLE = '#fff';
+var FINAL_SCORE_CONTEXT_STYLE = '#000';
+var FINAL_SCORE_CONTEXT_FONT = 'bold 42px Verdana';
 // Define PlayGround Object constants
 var PLAYGROUND_ROWS = 15 ;
 var PLAYGROUND_COLUMNS = 20;
@@ -20,7 +22,7 @@ var SCOREBOARD_INIT_STATUS = 'cool';
 var SCOREBOARD_INIT_SIZE = 5;
 var SCOREBOARD_CONTEXT_STYLE = '#000';
 var TEXT_CONTEXT_STYLE = '#000';
-var TEXT_CONTEXT_FONT = '24px Verdana';
+var TEXT_CONTEXT_FONT = 'bold 24px Verdana';
 // Define canvas update interval
 var INTERVAL_UPDATE_TIME = 50;
 
@@ -77,21 +79,22 @@ GameArea.prototype.setHighestScore = function(scoreboard) {
     var bestScore = localStorage.getItem('highestScore') || 0;
     if (scoreboard.points > bestScore) {
         localStorage.setItem('highestScore', scoreboard.points);
+        bestScore = localStorage.getItem('highestScore');
     }
-    console.log(bestScore);
     // Set text context
-    this.context.font = TEXT_CONTEXT_FONT;
-    this.context.fillStyle = TEXT_CONTEXT_STYLE;
+    this.context.font = FINAL_SCORE_CONTEXT_FONT;
+    this.context.fillStyle = FINAL_SCORE_CONTEXT_STYLE;
     // Ajustar marcador
     this.context.fillText(
-        'Your Score: ' + scoreboard.points,
-        SCOREBOARD_WIDTH + PLAYGROUND_WIDTH/3, this.height/3, this.width
+        'Highest Score: ' + bestScore,
+        SCOREBOARD_WIDTH + PLAYGROUND_WIDTH/3,
+        this.canvas.height/2, this.canvas.width
     );
     this.context.fillText(
-        'Highest Score: ' + bestScore,
-        this.x + 20, this.height/2, this.width
+        'Your Score: ' + scoreboard.points,
+        SCOREBOARD_WIDTH + PLAYGROUND_WIDTH/3,
+        this.canvas.height/3, this.canvas.width
     );
-    console.log('pintado');
 };
 
 
@@ -184,6 +187,6 @@ ScoreBoard.prototype.setScoreBoard = function(gameArea) {
     gameArea.context.font = TEXT_CONTEXT_FONT;
     gameArea.context.fillStyle = TEXT_CONTEXT_STYLE;
     // Ajustar marcador
-    gameArea.context.fillText('Score: ' + this.points, this.x + 20, this.height/4, this.width);
-    gameArea.context.fillText('Status: ' + this.status, this.x + 20, this.height/3, this.width);
+    gameArea.context.fillText('Score: ' + this.points, this.x + 20, this.height/2.2, this.width);
+    gameArea.context.fillText('Status: ' + this.status, this.x + 20, this.height/2, this.width);
 };

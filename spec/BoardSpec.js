@@ -9,6 +9,7 @@ describe("GameArea", function() {
         myGameArea = new GameArea();
         myPlayGround = new PlayGround();
         myScoreBoard = new ScoreBoard(myPlayGround, points, state);
+    
     });
 
     describe("GameArea constructor function", function() {
