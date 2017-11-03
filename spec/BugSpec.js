@@ -56,7 +56,9 @@ describe("Bug", function() {
         });
 
         it("should return undefined (no returning variable)", function() {
-            var images = {bug: {type: 'NEUTRAL_BUG', image: new Image()}};
+            var images = {
+                bug: { type: 'NEUTRAL_BUG', image: new Image() },
+            };
             expect(bug.getImage(images)).toBe(undefined);
         });
     });
