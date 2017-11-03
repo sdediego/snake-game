@@ -65,7 +65,7 @@ GameArea.prototype.clear = function() {
     this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
 };
 
-GameArea.prototype.dieSnake = function(gameArea) {
+GameArea.prototype.dieSnake = function() {
     // Game Over: Give last goodbye to our lovely reptile
     this.context.drawImage(
         this.endGame, SCOREBOARD_WIDTH, 0,

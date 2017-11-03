@@ -16,7 +16,6 @@ function Bug(x, y, type) {
     this.y = y;
     this.bugType = type || BUG_TYPE[0]['type'];
     this.image = new Image();
-    this.imageScale;
     this.images = {};
 }
 
